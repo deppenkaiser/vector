@@ -7,9 +7,14 @@ typedef struct vector_3d
     double z;
 } *vector_3d_t;
 
+#define VECTOR_LOCATION_TIME_ROW_SIZE 3
+
+typedef struct vector_3d vector_time_row_t[VECTOR_LOCATION_TIME_ROW_SIZE];
+
 struct vector_3d vector_add(vector_3d_t a, vector_3d_t b);
 struct vector_3d vector_sub(vector_3d_t a, vector_3d_t b);
 struct vector_3d vector_cross(vector_3d_t a, vector_3d_t b);
+struct vector_3d vector_nabla(vector_time_row_t r);
 struct vector_3d vector_multiply_scalar(vector_3d_t a, double s);
 struct vector_3d vector_divide_scalar(vector_3d_t a, double s);
 double vector_norm(vector_3d_t a);

@@ -28,6 +28,25 @@ struct vector_3d vector_cross(vector_3d_t a, vector_3d_t b)
     return v;
 }
 
+struct vector_3d vector_nabla(vector_time_row_t r)
+{
+    struct vector_3d v1 = {0};
+    struct vector_3d v2 = {0};
+    struct vector_3d w = {0};
+
+    v2 = vector_sub(&r[2], &r[1]);
+    v1 = vector_sub(&r[1], &r[0]);
+    w = vector_sub(&v2, &v1);
+
+    double dx = w.x, dy = w.y, dz = w.z;
+    
+    w.x = dz / (r[2].y - r[1].y) - dy / (r[2].z - r[1].z);
+    w.y = dx / (r[2].z - r[1].z) - dz / (r[2].x - r[1].x);
+    w.z = dy / (r[2].x - r[1].x) - dx / (r[2].y - r[1].y);
+
+    return w;
+}
+
 struct vector_3d vector_multiply_scalar(vector_3d_t a, double s)
 {
     struct vector_3d v = {0};
