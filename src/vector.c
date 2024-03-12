@@ -1,30 +1,30 @@
 #include "vector/vector.h"
 #include <math.h>
 
-struct vector_3d vector_add(vector_3d_t v1, vector_3d_t v2)
+struct vector_3d vector_add(vector_3d_t a, vector_3d_t b)
 {
     struct vector_3d v = {0};
-    v.x = v1->x + v2->x;
-    v.y = v1->y + v2->y;
-    v.z = v1->z + v2->z;
+    v.x = a->x + b->x;
+    v.y = a->y + b->y;
+    v.z = a->z + b->z;
     return v;
 }
 
-struct vector_3d vector_sub(vector_3d_t v1, vector_3d_t v2)
+struct vector_3d vector_sub(vector_3d_t a, vector_3d_t b)
 {
     struct vector_3d v = {0};
-    v.x = v1->x - v2->x;
-    v.y = v1->y - v2->y;
-    v.z = v1->z - v2->z;
+    v.x = a->x - b->x;
+    v.y = a->y - b->y;
+    v.z = a->z - b->z;
     return v;
 }
 
-double vector_norm(vector_3d_t v)
+double vector_norm(vector_3d_t a)
 {
-    return sqrt(v->x * v->x + v->y * v->y + v->z * v->z);
+    return sqrt(a->x * a->x + a->y * a->y + a->z * a->z);
 }
 
-void vector_clear(vector_3d_t v)
+void vector_clear(vector_3d_t a)
 {
-    v->x = v->y = v->z = 0.0;
+    a->x = a->y = a->z = 0.0;
 }
