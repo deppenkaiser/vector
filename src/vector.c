@@ -19,6 +19,33 @@ struct vector_3d vector_sub(vector_3d_t a, vector_3d_t b)
     return v;
 }
 
+struct vector_3d vector_cross(vector_3d_t a, vector_3d_t b)
+{
+    struct vector_3d v = {0};
+    v.x = a->y * b->z - a->z * b->y;
+    v.y = a->z * b->x - a->x * b->z;
+    v.z = a->x * b->y - a->y * b->x;
+    return v;
+}
+
+struct vector_3d vector_multiply_scalar(vector_3d_t a, double s)
+{
+    struct vector_3d v = {0};
+    v.x = a->x * s;
+    v.y = a->y * s;
+    v.z = a->z * s;
+    return v;
+}
+
+struct vector_3d vector_divide_scalar(vector_3d_t a, double s)
+{
+    struct vector_3d v = {0};
+    v.x = a->x / s;
+    v.y = a->y / s;
+    v.z = a->z / s;
+    return v;
+}
+
 double vector_norm(vector_3d_t a)
 {
     return sqrt(a->x * a->x + a->y * a->y + a->z * a->z);

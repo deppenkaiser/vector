@@ -9,5 +9,8 @@ typedef struct vector_3d
 
 struct vector_3d vector_add(vector_3d_t a, vector_3d_t b);
 struct vector_3d vector_sub(vector_3d_t a, vector_3d_t b);
+struct vector_3d vector_cross(vector_3d_t a, vector_3d_t b);
+struct vector_3d vector_multiply_scalar(vector_3d_t a, double s);
+struct vector_3d vector_divide_scalar(vector_3d_t a, double s);
 double vector_norm(vector_3d_t a);
 void vector_clear(vector_3d_t a);
