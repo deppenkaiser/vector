@@ -47,6 +47,15 @@ struct vector_3d vector_nabla(vector_time_row_t r)
     return w;
 }
 
+struct vector_3d vector_rotation_z(vector_3d_t r, double phi_rad)
+{
+    struct vector_3d row1 = {cos(phi_rad), -sin(phi_rad), 0.0};
+    struct vector_3d row2 = {sin(phi_rad), cos(phi_rad), 0.0};
+    struct vector_3d row3 = {0.0, 0.0, 1.0};
+    struct vector_3d v = {vector_dot(r, &row1), vector_dot(r, &row2), vector_dot(r, &row3)};
+    return v;
+}
+
 struct vector_3d vector_multiply_scalar(vector_3d_t a, double s)
 {
     struct vector_3d v = {0};
@@ -63,6 +72,11 @@ struct vector_3d vector_divide_scalar(vector_3d_t a, double s)
     v.y = a->y / s;
     v.z = a->z / s;
     return v;
+}
+
+double vector_dot(vector_3d_t a, vector_3d_t b)
+{
+    return a->x * b->x + a->y * b->y + a->z * b->z;
 }
 
 double vector_norm(vector_3d_t a)
