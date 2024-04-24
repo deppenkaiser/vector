@@ -47,6 +47,24 @@ struct vector_3d vector_nabla(vector_time_row_t r)
     return w;
 }
 
+struct vector_3d vector_rotation_x(vector_3d_t r, double phi_rad)
+{
+    struct vector_3d row1 = {1.0, 0.0, 0.0};
+    struct vector_3d row2 = {0.0, cos(phi_rad), -sin(phi_rad)};
+    struct vector_3d row3 = {0.0, sin(phi_rad), cos(phi_rad)};
+    struct vector_3d v = {vector_dot(r, &row1), vector_dot(r, &row2), vector_dot(r, &row3)};
+    return v;
+}
+
+struct vector_3d vector_rotation_y(vector_3d_t r, double phi_rad)
+{
+    struct vector_3d row1 = {cos(phi_rad), 0.0, sin(phi_rad)};
+    struct vector_3d row2 = {0.0, 1.0, 0.0};
+    struct vector_3d row3 = {-sin(phi_rad), 0.0, cos(phi_rad)};
+    struct vector_3d v = {vector_dot(r, &row1), vector_dot(r, &row2), vector_dot(r, &row3)};
+    return v;
+}
+
 struct vector_3d vector_rotation_z(vector_3d_t r, double phi_rad)
 {
     struct vector_3d row1 = {cos(phi_rad), -sin(phi_rad), 0.0};

@@ -15,6 +15,8 @@ struct vector_3d vector_add(vector_3d_t a, vector_3d_t b);
 struct vector_3d vector_sub(vector_3d_t a, vector_3d_t b);
 struct vector_3d vector_cross(vector_3d_t a, vector_3d_t b);
 struct vector_3d vector_nabla(vector_time_row_t r);
+struct vector_3d vector_rotation_x(vector_3d_t r, double phi_rad);
+struct vector_3d vector_rotation_y(vector_3d_t r, double phi_rad);
 struct vector_3d vector_rotation_z(vector_3d_t r, double phi_rad);
 struct vector_3d vector_multiply_scalar(vector_3d_t a, double s);
 struct vector_3d vector_divide_scalar(vector_3d_t a, double s);
