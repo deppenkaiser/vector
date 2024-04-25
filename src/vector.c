@@ -92,7 +92,7 @@ struct vector_3d vector_divide_scalar(vector_3d_t a, double s)
     return v;
 }
 
-struct vector_astro vector_cartesian_to_astro(vector_3d_t a)
+struct vector_astro vector_cartesian_to_astronomical(vector_3d_t a)
 {
     struct vector_astro p = {0};
     const double rho_sqr = a->x * a->x + a->y * a->y;
