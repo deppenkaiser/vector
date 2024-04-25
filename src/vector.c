@@ -92,6 +92,18 @@ struct vector_3d vector_divide_scalar(vector_3d_t a, double s)
     return v;
 }
 
+struct vector_astro vector_cartesian_to_astro(vector_3d_t a)
+{
+    struct vector_astro p = {0};
+    const double rho_sqr = a->x * a->x + a->y * a->y;
+    const double rho = sqrt(rho_sqr);
+    p.r = sqrt(rho_sqr + a->z * a->z);
+    p.theta = ((a->z == 0.0) || (rho == 0.0)) ? 0.0 : atan2(a->z, rho);
+    p.phi = ((a->x == 0.0) || (a->y == 0.0)) ? 0.0 : atan2(a->y, a->x);
+    p.phi = (p.phi >= 0.0) ? p.phi : p.phi + 2.0 * acos(-1.0);
+    return p;
+}
+
 double vector_dot(vector_3d_t a, vector_3d_t b)
 {
     return a->x * b->x + a->y * b->y + a->z * b->z;
