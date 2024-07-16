@@ -13,4 +13,5 @@ target_include_directories(vector PRIVATE
 )
 
 target_link_libraries(vector
+    m
 )
