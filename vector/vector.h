@@ -31,6 +31,6 @@ struct vector_3d vector_rotation_z(vector_3d_t r, cld phi_rad);
 struct vector_3d vector_multiply_scalar(vector_3d_t a, cld s);
 struct vector_3d vector_divide_scalar(vector_3d_t a, cld s);
 struct vector_astro vector_cartesian_to_astronomical(vector_3d_t a);
-double vector_dot(vector_3d_t a, vector_3d_t b);
-double vector_norm(vector_3d_t a);
+ld vector_dot(vector_3d_t a, vector_3d_t b);
+ld vector_norm(vector_3d_t a);
 void vector_clear(vector_3d_t a);

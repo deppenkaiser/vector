@@ -104,12 +104,12 @@ struct vector_astro vector_cartesian_to_astronomical(vector_3d_t a)
     return p;
 }
 
-double vector_dot(vector_3d_t a, vector_3d_t b)
+ld vector_dot(vector_3d_t a, vector_3d_t b)
 {
     return a->x * b->x + a->y * b->y + a->z * b->z;
 }
 
-double vector_norm(vector_3d_t a)
+ld vector_norm(vector_3d_t a)
 {
     return sqrt(a->x * a->x + a->y * a->y + a->z * a->z);
 }
