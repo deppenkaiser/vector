@@ -33,6 +33,6 @@ struct vector_3d vector_divide_scalar(const vector_3d_t a, cld s);
 struct vector_astro vector_cartesian_to_astronomical(const vector_3d_t a);
 ld vector_dot(const vector_3d_t a, const vector_3d_t b);
 ld vector_norm(const vector_3d_t a);
-void vector_clear(vector_3d_t a);
+struct vector_3d vector_clear(vector_3d_t a);
 struct vector_3d vector_normalize(const vector_3d_t a);
 ld vector_distance(const vector_3d_t a, const vector_3d_t b);

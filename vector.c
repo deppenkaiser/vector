@@ -114,9 +114,12 @@ ld vector_norm(const vector_3d_t a)
     return sqrt(a->x * a->x + a->y * a->y + a->z * a->z);
 }
 
-void vector_clear(vector_3d_t a)
+struct vector_3d vector_clear(vector_3d_t a)
 {
-    a->x = a->y = a->z = 0.0;
+	struct vector_3d v = *a;
+   	v.x = v.y = v.z = 0.0L;
+	*a = v;
+	return v;
 }
 
 struct vector_3d vector_normalize(const vector_3d_t a)
