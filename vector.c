@@ -118,3 +118,27 @@ void vector_clear(vector_3d_t a)
 {
     a->x = a->y = a->z = 0.0;
 }
+
+struct vector_3d vector_normalize(vector_3d_t a)
+{
+    struct vector_3d v = {0};
+    ld n = vector_norm(a);
+    if (n < 1e-30L)
+    {
+        v.x = 0.0L;
+        v.y = 0.0L;
+        v.z = 0.0L;
+        return v;
+    }
+    cld inv = 1.0L / n;
+    v.x = a->x * inv;
+    v.y = a->y * inv;
+    v.z = a->z * inv;
+    return v;
+}
+
+ld vector_distance(vector_3d_t a, vector_3d_t b)
+{
+    struct vector_3d d = vector_sub(a, b);
+    return vector_norm(&d);
+}

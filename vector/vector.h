@@ -34,3 +34,5 @@ struct vector_astro vector_cartesian_to_astronomical(vector_3d_t a);
 ld vector_dot(vector_3d_t a, vector_3d_t b);
 ld vector_norm(vector_3d_t a);
 void vector_clear(vector_3d_t a);
+struct vector_3d vector_normalize(vector_3d_t a);
+ld vector_distance(vector_3d_t a, vector_3d_t b);
