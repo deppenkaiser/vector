@@ -1,5 +1,6 @@
 #include "vector/vector.h"
 #include <math.h>
+#include <stddef.h>
 
 struct vector_3d vector_add(const vector_3d_t a, const vector_3d_t b)
 {
@@ -116,9 +117,14 @@ ld vector_norm(const vector_3d_t a)
 
 struct vector_3d vector_clear(vector_3d_t a)
 {
-	struct vector_3d v = *a;
+	struct vector_3d v = {0};
    	v.x = v.y = v.z = 0.0L;
-	*a = v;
+
+	if (a != NULL)
+	{
+		*a = v;
+	}
+
 	return v;
 }
 
