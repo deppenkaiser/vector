@@ -8,13 +8,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_library(vector STATIC)
-
 target_sources(vector PRIVATE
     vector.c
 )
 
-target_include_directories(vector PUBLIC 
+target_include_directories(vector PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_link_libraries(vector)
+target_link_libraries(vector PUBLIC)
