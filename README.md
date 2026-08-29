@@ -29,6 +29,10 @@ ld d = vector_distance(a, b);
 
 Keine weiteren Projekt-Bibliotheken.
 
+## Wiki
+
+Dokumentation: [vector – 3D-Vektor-Mathematik](https://czybor.i234.me/wiki/sw-module/vector/) (Quartz-Wiki)
+
 ## Build
 
 ```bash
