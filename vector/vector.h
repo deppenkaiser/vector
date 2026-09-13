@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 typedef long double ld;
 typedef const long double cld;
 
@@ -63,3 +65,7 @@ struct matrix_4x4 matrix_4x4_ortho(float left, float right, float bottom, float 
 struct matrix_4x4 matrix_4x4_translate(float tx, float ty);
 struct matrix_4x4 matrix_4x4_scale(float sx, float sy);
 struct vector_2d matrix_4x4_transform_point(const matrix_4x4_t mat, const vector_2d_t point);
+
+// === 2D Orthographic Projection (Pixel Space → Clip Space) ===
+struct matrix_4x4 matrix_4x4_ortho_pixel_y_down(uint32_t width, uint32_t height);
+struct matrix_4x4 matrix_4x4_ortho_pixel_y_up(uint32_t width, uint32_t height);

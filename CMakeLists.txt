@@ -16,4 +16,4 @@ target_include_directories(vector PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_link_libraries(vector PUBLIC)
+target_link_libraries(vector PUBLIC m)

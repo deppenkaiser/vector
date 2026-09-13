@@ -244,3 +244,44 @@ struct vector_2d matrix_4x4_transform_point(const matrix_4x4_t mat, const vector
     
     return result;
 }
+
+// === 2D Orthographic Projection (Pixel Space → Clip Space) ===
+
+// Y-down: pixel (0,0) at top-left → Vulkan clip (-1,1) top-left, (1,-1) bottom-right
+struct matrix_4x4 matrix_4x4_ortho_pixel_y_down(uint32_t width, uint32_t height)
+{
+    struct matrix_4x4 mat = {0};
+    memset(mat.m, 0, sizeof(mat.m));
+    
+    float w = (float)width;
+    float h = (float)height;
+    
+    // Column-major: maps pixel (0,0) → clip (-1,1), pixel (w,h) → clip (1,-1)
+    mat.m[0]  = 2.0f / w;
+    mat.m[5]  = -2.0f / h;
+    mat.m[10] = 1.0f;
+    mat.m[12] = -1.0f;
+    mat.m[13] = 1.0f;
+    mat.m[15] = 1.0f;
+    
+    return mat;
+}
+
+// Y-up: pixel (0,0) at bottom-left → Vulkan clip (-1,-1) bottom-left, (1,1) top-right
+struct matrix_4x4 matrix_4x4_ortho_pixel_y_up(uint32_t width, uint32_t height)
+{
+    struct matrix_4x4 mat = {0};
+    memset(mat.m, 0, sizeof(mat.m));
+    
+    float w = (float)width;
+    float h = (float)height;
+    
+    mat.m[0]  = 2.0f / w;
+    mat.m[5]  = 2.0f / h;
+    mat.m[10] = 1.0f;
+    mat.m[12] = -1.0f;
+    mat.m[13] = -1.0f;
+    mat.m[15] = 1.0f;
+    
+    return mat;
+}
