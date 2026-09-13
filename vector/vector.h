@@ -62,8 +62,13 @@ typedef struct transform_2d
 struct matrix_4x4 matrix_4x4_identity(void);
 struct matrix_4x4 matrix_4x4_multiply(const matrix_4x4_t a, const matrix_4x4_t b);
 struct matrix_4x4 matrix_4x4_ortho(float left, float right, float bottom, float top);
-struct matrix_4x4 matrix_4x4_translate(float tx, float ty);
-struct matrix_4x4 matrix_4x4_scale(float sx, float sy);
+struct matrix_4x4 matrix_4x4_perspective(float fov_rad, float aspect, float near_plane, float far_plane);
+struct matrix_4x4 matrix_4x4_translate_3d(float tx, float ty, float tz);
+struct matrix_4x4 matrix_4x4_scale_3d(float sx, float sy, float sz);
+struct matrix_4x4 matrix_4x4_rotate_x(float angle_rad);
+struct matrix_4x4 matrix_4x4_rotate_y(float angle_rad);
+struct matrix_4x4 matrix_4x4_rotate_z(float angle_rad);
+struct matrix_4x4 matrix_4x4_lookat(float eye_x, float eye_y, float eye_z, float center_x, float center_y, float center_z, float up_x, float up_y, float up_z);
 struct vector_2d matrix_4x4_transform_point(const matrix_4x4_t mat, const vector_2d_t point);
 
 // === 2D Orthographic Projection (Pixel Space → Clip Space) ===

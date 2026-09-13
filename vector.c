@@ -216,19 +216,108 @@ struct matrix_4x4 matrix_4x4_ortho(float left, float right, float bottom, float 
     return mat;
 }
 
-struct matrix_4x4 matrix_4x4_translate(float tx, float ty)
+struct matrix_4x4 matrix_4x4_translate_3d(float tx, float ty, float tz)
 {
     struct matrix_4x4 mat = matrix_4x4_identity();
     mat.m[12] = tx;
     mat.m[13] = ty;
+    mat.m[14] = tz;
     return mat;
 }
 
-struct matrix_4x4 matrix_4x4_scale(float sx, float sy)
+struct matrix_4x4 matrix_4x4_scale_3d(float sx, float sy, float sz)
 {
     struct matrix_4x4 mat = matrix_4x4_identity();
     mat.m[0] = sx;
     mat.m[5] = sy;
+    mat.m[10] = sz;
+    return mat;
+}
+
+struct matrix_4x4 matrix_4x4_rotate_x(float angle_rad)
+{
+    struct matrix_4x4 mat = matrix_4x4_identity();
+    float c = cosf(angle_rad);
+    float s = sinf(angle_rad);
+    mat.m[5] = c;
+    mat.m[6] = -s;
+    mat.m[9] = s;
+    mat.m[10] = c;
+    return mat;
+}
+
+struct matrix_4x4 matrix_4x4_rotate_y(float angle_rad)
+{
+    struct matrix_4x4 mat = matrix_4x4_identity();
+    float c = cosf(angle_rad);
+    float s = sinf(angle_rad);
+    mat.m[0] = c;
+    mat.m[2] = s;
+    mat.m[8] = -s;
+    mat.m[10] = c;
+    return mat;
+}
+
+struct matrix_4x4 matrix_4x4_rotate_z(float angle_rad)
+{
+    struct matrix_4x4 mat = matrix_4x4_identity();
+    float c = cosf(angle_rad);
+    float s = sinf(angle_rad);
+    mat.m[0] = c;
+    mat.m[1] = -s;
+    mat.m[4] = s;
+    mat.m[5] = c;
+    return mat;
+}
+
+struct matrix_4x4 matrix_4x4_perspective(float fov_rad, float aspect, float near_plane, float far_plane)
+{
+    struct matrix_4x4 mat = {0};
+    memset(mat.m, 0, sizeof(mat.m));
+    
+    float tan_half = tanf(fov_rad / 2.0f);
+    mat.m[0] = 1.0f / (aspect * tan_half);
+    mat.m[5] = 1.0f / tan_half;
+    mat.m[10] = far_plane / (near_plane - far_plane);
+    mat.m[11] = -1.0f;
+    mat.m[14] = (near_plane * far_plane) / (near_plane - far_plane);
+    
+    return mat;
+}
+
+struct matrix_4x4 matrix_4x4_lookat(float eye_x, float eye_y, float eye_z,
+                                     float center_x, float center_y, float center_z,
+                                     float up_x, float up_y, float up_z)
+{
+    struct matrix_4x4 mat = {0};
+    memset(mat.m, 0, sizeof(mat.m));
+    
+    // Forward vector (from eye to center, normalized)
+    float fx = center_x - eye_x;
+    float fy = center_y - eye_y;
+    float fz = center_z - eye_z;
+    float flen = sqrtf(fx * fx + fy * fy + fz * fz);
+    if (flen > 0.0f) { fx /= flen; fy /= flen; fz /= flen; }
+    
+    // Right vector = forward x up
+    float rx = fy * up_z - fz * up_y;
+    float ry = fz * up_x - fx * up_z;
+    float rz = fx * up_y - fy * up_x;
+    float rlen = sqrtf(rx * rx + ry * ry + rz * rz);
+    if (rlen > 0.0f) { rx /= rlen; ry /= rlen; rz /= rlen; }
+    
+    // True up vector = right x forward
+    float ux = ry * fz - rz * fy;
+    float uy = rz * fx - rx * fz;
+    float uz = rx * fy - ry * fx;
+    
+    mat.m[0] = rx;   mat.m[4] = ux;   mat.m[8]  = -fx;  mat.m[15] = 1.0f;
+    mat.m[1] = ry;   mat.m[5] = uy;   mat.m[9]  = -fy;
+    mat.m[2] = rz;   mat.m[6] = uz;   mat.m[10] = -fz;
+    mat.m[12] = -(rx * eye_x + ry * eye_y + rz * eye_z);
+    mat.m[13] = -(ux * eye_x + uy * eye_y + uz * eye_z);
+    mat.m[14] = (fx * eye_x + fy * eye_y + fz * eye_z);
+    
     return mat;
 }
 
