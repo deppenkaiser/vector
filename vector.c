@@ -274,14 +274,15 @@ struct matrix_4x4 matrix_4x4_perspective(float fov_rad, float aspect, float near
 {
     struct matrix_4x4 mat = {0};
     memset(mat.m, 0, sizeof(mat.m));
-    
+
     float tan_half = tanf(fov_rad / 2.0f);
     mat.m[0] = 1.0f / (aspect * tan_half);
-    mat.m[5] = 1.0f / tan_half;
-    mat.m[10] = far_plane / (near_plane - far_plane);
-    mat.m[11] = -1.0f;
+    mat.m[5] = -1.0f / tan_half;  // Vulkan Y-down: negate Y
+    mat.m[10] = far_plane / (far_plane - near_plane);
+    mat.m[11] = 1.0f;
     mat.m[14] = (near_plane * far_plane) / (near_plane - far_plane);
-    
+    mat.m[15] = 0.0f;
+
     return mat;
 }
 
@@ -291,33 +292,34 @@ struct matrix_4x4 matrix_4x4_lookat(float eye_x, float eye_y, float eye_z,
 {
     struct matrix_4x4 mat = {0};
     memset(mat.m, 0, sizeof(mat.m));
-    
+
     // Forward vector (from eye to center, normalized)
     float fx = center_x - eye_x;
     float fy = center_y - eye_y;
     float fz = center_z - eye_z;
     float flen = sqrtf(fx * fx + fy * fy + fz * fz);
     if (flen > 0.0f) { fx /= flen; fy /= flen; fz /= flen; }
-    
+
     // Right vector = forward x up
     float rx = fy * up_z - fz * up_y;
     float ry = fz * up_x - fx * up_z;
     float rz = fx * up_y - fy * up_x;
     float rlen = sqrtf(rx * rx + ry * ry + rz * rz);
     if (rlen > 0.0f) { rx /= rlen; ry /= rlen; rz /= rlen; }
-    
+
     // True up vector = right x forward
     float ux = ry * fz - rz * fy;
     float uy = rz * fx - rx * fz;
     float uz = rx * fy - ry * fx;
-    
-    mat.m[0] = rx;   mat.m[4] = ux;   mat.m[8]  = -fx;  mat.m[15] = 1.0f;
-    mat.m[1] = ry;   mat.m[5] = uy;   mat.m[9]  = -fy;
-    mat.m[2] = rz;   mat.m[6] = uz;   mat.m[10] = -fz;
+
+    // Vulkan left-handed: forward is +Z (into screen)
+    mat.m[0] = rx;   mat.m[4] = ux;   mat.m[8]  = fx;   mat.m[15] = 1.0f;
+    mat.m[1] = ry;   mat.m[5] = uy;   mat.m[9]  = fy;
+    mat.m[2] = rz;   mat.m[6] = uz;   mat.m[10] = fz;
     mat.m[12] = -(rx * eye_x + ry * eye_y + rz * eye_z);
     mat.m[13] = -(ux * eye_x + uy * eye_y + uz * eye_z);
-    mat.m[14] = (fx * eye_x + fy * eye_y + fz * eye_z);
-    
+    mat.m[14] = -(fx * eye_x + fy * eye_y + fz * eye_z);
+
     return mat;
 }
 
