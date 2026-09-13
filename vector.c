@@ -1,6 +1,9 @@
 #include "vector/vector.h"
 #include <math.h>
 #include <stddef.h>
+#include <string.h>
+
+// === 3D Vector Functions (existing) ===
 
 struct vector_3d vector_add(const vector_3d_t a, const vector_3d_t b)
 {
@@ -117,15 +120,15 @@ ld vector_norm(const vector_3d_t a)
 
 struct vector_3d vector_clear(vector_3d_t a)
 {
-	struct vector_3d v = {0};
-   	v.x = v.y = v.z = 0.0L;
+    struct vector_3d v = {0};
+    v.x = v.y = v.z = 0.0L;
 
-	if (a != NULL)
-	{
-		*a = v;
-	}
+    if (a != NULL)
+    {
+        *a = v;
+    }
 
-	return v;
+    return v;
 }
 
 struct vector_3d vector_normalize(const vector_3d_t a)
@@ -150,4 +153,94 @@ ld vector_distance(const vector_3d_t a, const vector_3d_t b)
 {
     struct vector_3d d = vector_sub(a, b);
     return vector_norm(&d);
+}
+
+// === 2D Vector Functions ===
+
+struct vector_2d vector_2d_add(const vector_2d_t a, const vector_2d_t b)
+{
+    struct vector_2d v = {a->x + b->x, a->y + b->y};
+    return v;
+}
+
+struct vector_2d vector_2d_sub(const vector_2d_t a, const vector_2d_t b)
+{
+    struct vector_2d v = {a->x - b->x, a->y - b->y};
+    return v;
+}
+
+// === 4x4 Matrix Functions (column-major) ===
+
+struct matrix_4x4 matrix_4x4_identity(void)
+{
+    struct matrix_4x4 mat = {0};
+    memset(mat.m, 0, sizeof(mat.m));
+    mat.m[0] = 1.0f;
+    mat.m[5] = 1.0f;
+    mat.m[10] = 1.0f;
+    mat.m[15] = 1.0f;
+    return mat;
+}
+
+struct matrix_4x4 matrix_4x4_multiply(const matrix_4x4_t a, const matrix_4x4_t b)
+{
+    struct matrix_4x4 result = {0};
+    memset(result.m, 0, sizeof(result.m));
+    
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            float sum = 0.0f;
+            for (int k = 0; k < 4; k++) {
+                sum += a->m[i + k * 4] * b->m[k + j * 4];
+            }
+            result.m[i + j * 4] = sum;
+        }
+    }
+    
+    return result;
+}
+
+struct matrix_4x4 matrix_4x4_ortho(float left, float right, float bottom, float top)
+{
+    struct matrix_4x4 mat = {0};
+    memset(mat.m, 0, sizeof(mat.m));
+    
+    mat.m[0] = 2.0f / (right - left);
+    mat.m[5] = 2.0f / (top - bottom);
+    mat.m[10] = -1.0f;
+    mat.m[12] = -(right + left) / (right - left);
+    mat.m[13] = -(top + bottom) / (top - bottom);
+    mat.m[14] = 0.0f;
+    mat.m[15] = 1.0f;
+    
+    return mat;
+}
+
+struct matrix_4x4 matrix_4x4_translate(float tx, float ty)
+{
+    struct matrix_4x4 mat = matrix_4x4_identity();
+    mat.m[12] = tx;
+    mat.m[13] = ty;
+    return mat;
+}
+
+struct matrix_4x4 matrix_4x4_scale(float sx, float sy)
+{
+    struct matrix_4x4 mat = matrix_4x4_identity();
+    mat.m[0] = sx;
+    mat.m[5] = sy;
+    return mat;
+}
+
+struct vector_2d matrix_4x4_transform_point(const matrix_4x4_t mat, const vector_2d_t point)
+{
+    struct vector_2d result = {0};
+    
+    float x = point->x;
+    float y = point->y;
+    
+    result.x = mat->m[0] * x + mat->m[4] * y + mat->m[12];
+    result.y = mat->m[1] * x + mat->m[5] * y + mat->m[13];
+    
+    return result;
 }
