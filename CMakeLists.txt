@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
+include_guard(GLOBAL)
 
 project(vector LANGUAGES C)
 
@@ -16,4 +17,4 @@ target_include_directories(vector PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_link_libraries(vector PUBLIC m)
+target_link_libraries(vector PRIVATE m)
