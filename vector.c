@@ -363,16 +363,31 @@ struct matrix_4x4 matrix_4x4_ortho_pixel_y_up(uint32_t width, uint32_t height)
 {
     struct matrix_4x4 mat = {0};
     memset(mat.m, 0, sizeof(mat.m));
-    
+
     float w = (float)width;
     float h = (float)height;
-    
+
     mat.m[0]  = 2.0f / w;
     mat.m[5]  = 2.0f / h;
     mat.m[10] = 1.0f;
     mat.m[12] = -1.0f;
     mat.m[13] = -1.0f;
     mat.m[15] = 1.0f;
-    
+
     return mat;
+}
+
+// === MVP Computation ===
+
+struct matrix_4x4 matrix_4x4_mvp_perspective(float fov_rad, float aspect, float near_plane, float far_plane,
+                                               float eye_x, float eye_y, float eye_z,
+                                               float target_x, float target_y, float target_z,
+                                               float up_x, float up_y, float up_z)
+{
+    struct matrix_4x4 proj = matrix_4x4_perspective(fov_rad, aspect, near_plane, far_plane);
+    struct matrix_4x4 view = matrix_4x4_lookat(eye_x, eye_y, eye_z, target_x, target_y, target_z, up_x, up_y, up_z);
+    struct matrix_4x4 model = matrix_4x4_identity();
+    struct matrix_4x4 temp = matrix_4x4_multiply(&view, &model);
+    struct matrix_4x4 mvp = matrix_4x4_multiply(&proj, &temp);
+    return mvp;
 }

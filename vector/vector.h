@@ -74,3 +74,9 @@ struct vector_2d matrix_4x4_transform_point(const matrix_4x4_t mat, const vector
 // === 2D Orthographic Projection (Pixel Space → Clip Space) ===
 struct matrix_4x4 matrix_4x4_ortho_pixel_y_down(uint32_t width, uint32_t height);
 struct matrix_4x4 matrix_4x4_ortho_pixel_y_up(uint32_t width, uint32_t height);
+
+// === MVP Computation ===
+struct matrix_4x4 matrix_4x4_mvp_perspective(float fov_rad, float aspect, float near_plane, float far_plane,
+                                               float eye_x, float eye_y, float eye_z,
+                                               float target_x, float target_y, float target_z,
+                                               float up_x, float up_y, float up_z);
