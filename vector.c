@@ -155,6 +155,158 @@ ld vector_distance(const vector_3d_t a, const vector_3d_t b)
     return vector_norm(&d);
 }
 
+// === 3D Float Vector Functions ===
+
+struct vector_3df vector_f_add(const vector_3df_t a, const vector_3df_t b)
+{
+    struct vector_3df v = {0};
+    v.x = a->x + b->x;
+    v.y = a->y + b->y;
+    v.z = a->z + b->z;
+    return v;
+}
+
+struct vector_3df vector_f_sub(const vector_3df_t a, const vector_3df_t b)
+{
+    struct vector_3df v = {0};
+    v.x = a->x - b->x;
+    v.y = a->y - b->y;
+    v.z = a->z - b->z;
+    return v;
+}
+
+struct vector_3df vector_f_cross(const vector_3df_t a, const vector_3df_t b)
+{
+    struct vector_3df v = {0};
+    v.x = a->y * b->z - a->z * b->y;
+    v.y = a->z * b->x - a->x * b->z;
+    v.z = a->x * b->y - a->y * b->x;
+    return v;
+}
+
+struct vector_3df vector_f_nabla(vector_3df_time_row_t r)
+{
+    struct vector_3df v1 = {0};
+    struct vector_3df v2 = {0};
+    struct vector_3df w = {0};
+
+    v2 = vector_f_sub(&r[2], &r[1]);
+    v1 = vector_f_sub(&r[1], &r[0]);
+    w = vector_f_sub(&v2, &v1);
+
+    double dx = w.x, dy = w.y, dz = w.z;
+
+    w.x = dz / (r[2].y - r[1].y) - dy / (r[2].z - r[1].z);
+    w.y = dx / (r[2].z - r[1].z) - dz / (r[2].x - r[1].x);
+    w.z = dy / (r[2].x - r[1].x) - dx / (r[2].y - r[1].y);
+
+    return w;
+}
+
+struct vector_3df vector_f_rotation_x(const vector_3df_t r, float phi_rad)
+{
+    struct vector_3df row1 = {1.0f, 0.0f, 0.0f};
+    struct vector_3df row2 = {0.0f, cosf(phi_rad), -sinf(phi_rad)};
+    struct vector_3df row3 = {0.0f, sinf(phi_rad), cosf(phi_rad)};
+    struct vector_3df v = {vector_f_dot(r, &row1), vector_f_dot(r, &row2), vector_f_dot(r, &row3)};
+    return v;
+}
+
+struct vector_3df vector_f_rotation_y(const vector_3df_t r, float phi_rad)
+{
+    struct vector_3df row1 = {cosf(phi_rad), 0.0f, sinf(phi_rad)};
+    struct vector_3df row2 = {0.0f, 1.0f, 0.0f};
+    struct vector_3df row3 = {-sinf(phi_rad), 0.0f, cosf(phi_rad)};
+    struct vector_3df v = {vector_f_dot(r, &row1), vector_f_dot(r, &row2), vector_f_dot(r, &row3)};
+    return v;
+}
+
+struct vector_3df vector_f_rotation_z(const vector_3df_t r, float phi_rad)
+{
+    struct vector_3df row1 = {cosf(phi_rad), -sinf(phi_rad), 0.0f};
+    struct vector_3df row2 = {sinf(phi_rad), cosf(phi_rad), 0.0f};
+    struct vector_3df row3 = {0.0f, 0.0f, 1.0f};
+    struct vector_3df v = {vector_f_dot(r, &row1), vector_f_dot(r, &row2), vector_f_dot(r, &row3)};
+    return v;
+}
+
+struct vector_3df vector_f_multiply_scalar(const vector_3df_t a, float s)
+{
+    struct vector_3df v = {0};
+    v.x = a->x * s;
+    v.y = a->y * s;
+    v.z = a->z * s;
+    return v;
+}
+
+struct vector_3df vector_f_divide_scalar(const vector_3df_t a, float s)
+{
+    struct vector_3df v = {0};
+    v.x = a->x / s;
+    v.y = a->y / s;
+    v.z = a->z / s;
+    return v;
+}
+
+struct vector_astro_f vector_f_cartesian_to_astronomical(const vector_3df_t a)
+{
+    struct vector_astro_f p = {0};
+    float rho_sqr = a->x * a->x + a->y * a->y;
+    float rho = sqrtf(rho_sqr);
+    p.r = sqrtf(rho_sqr + a->z * a->z);
+    p.theta = ((a->z == 0.0f) || (rho == 0.0f)) ? 0.0f : atan2f(a->z, rho);
+    p.phi = ((a->x == 0.0f) || (a->y == 0.0f)) ? 0.0f : atan2f(a->y, a->x);
+    p.phi = (p.phi >= 0.0f) ? p.phi : p.phi + 2.0f * acosf(-1.0f);
+    return p;
+}
+
+float vector_f_dot(const vector_3df_t a, const vector_3df_t b)
+{
+    return a->x * b->x + a->y * b->y + a->z * b->z;
+}
+
+float vector_f_norm(const vector_3df_t a)
+{
+    return sqrtf(a->x * a->x + a->y * a->y + a->z * a->z);
+}
+
+struct vector_3df vector_f_clear(vector_3df_t a)
+{
+    struct vector_3df v = {0};
+    v.x = v.y = v.z = 0.0f;
+
+    if (a != NULL)
+    {
+        *a = v;
+    }
+
+    return v;
+}
+
+struct vector_3df vector_f_normalize(const vector_3df_t a)
+{
+    struct vector_3df v = {0};
+    float n = vector_f_norm(a);
+    if (n < 1e-30f)
+    {
+        v.x = 0.0f;
+        v.y = 0.0f;
+        v.z = 0.0f;
+        return v;
+    }
+    float inv = 1.0f / n;
+    v.x = a->x * inv;
+    v.y = a->y * inv;
+    v.z = a->z * inv;
+    return v;
+}
+
+float vector_f_distance(const vector_3df_t a, const vector_3df_t b)
+{
+    struct vector_3df d = vector_f_sub(a, b);
+    return vector_f_norm(&d);
+}
+
 // === 2D Vector Functions ===
 
 struct vector_2d vector_2d_add(const vector_2d_t a, const vector_2d_t b)

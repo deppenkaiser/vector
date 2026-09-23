@@ -12,6 +12,20 @@ typedef struct vector_3d
     ld z;
 }* vector_3d_t;
 
+typedef struct vector_3df
+{
+    float x;
+    float y;
+    float z;
+}* vector_3df_t;
+
+typedef struct vector_astro_f
+{
+    float r;
+    float phi;
+    float theta;
+} * vector_astro_f_t;
+
 typedef struct vector_astro
 {
     ld r;
@@ -22,6 +36,7 @@ typedef struct vector_astro
 #define VECTOR_LOCATION_TIME_ROW_SIZE 3
 
 typedef struct vector_3d vector_time_row_t[VECTOR_LOCATION_TIME_ROW_SIZE];
+typedef struct vector_3df vector_3df_time_row_t[VECTOR_LOCATION_TIME_ROW_SIZE];
 
 struct vector_3d vector_add(const vector_3d_t a, const vector_3d_t b);
 struct vector_3d vector_sub(const vector_3d_t a, const vector_3d_t b);
@@ -38,6 +53,23 @@ ld vector_norm(const vector_3d_t a);
 struct vector_3d vector_clear(vector_3d_t a);
 struct vector_3d vector_normalize(const vector_3d_t a);
 ld vector_distance(const vector_3d_t a, const vector_3d_t b);
+
+// === 3D Float Vector Functions ===
+struct vector_3df vector_f_add(const vector_3df_t a, const vector_3df_t b);
+struct vector_3df vector_f_sub(const vector_3df_t a, const vector_3df_t b);
+struct vector_3df vector_f_cross(const vector_3df_t a, const vector_3df_t b);
+struct vector_3df vector_f_nabla(vector_3df_time_row_t r);
+struct vector_3df vector_f_rotation_x(const vector_3df_t r, float phi_rad);
+struct vector_3df vector_f_rotation_y(const vector_3df_t r, float phi_rad);
+struct vector_3df vector_f_rotation_z(const vector_3df_t r, float phi_rad);
+struct vector_3df vector_f_multiply_scalar(const vector_3df_t a, float s);
+struct vector_3df vector_f_divide_scalar(const vector_3df_t a, float s);
+struct vector_astro_f vector_f_cartesian_to_astronomical(const vector_3df_t a);
+float vector_f_dot(const vector_3df_t a, const vector_3df_t b);
+float vector_f_norm(const vector_3df_t a);
+struct vector_3df vector_f_clear(vector_3df_t a);
+struct vector_3df vector_f_normalize(const vector_3df_t a);
+float vector_f_distance(const vector_3df_t a, const vector_3df_t b);
 
 // === 2D Vector ===
 typedef struct vector_2d
