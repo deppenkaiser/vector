@@ -13,8 +13,11 @@ target_sources(vector PRIVATE
     vector.c
 )
 
-target_include_directories(vector PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
+target_include_directories(vector
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/..
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(vector PRIVATE m)
