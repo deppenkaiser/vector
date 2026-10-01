@@ -1,9 +1,10 @@
+// === 3D Vector Functions (existing) ===
 #include "vector/vector.h"
+
 #include <math.h>
 #include <stddef.h>
 #include <string.h>
 
-// === 3D Vector Functions (existing) ===
 
 struct vector_3d vector_add(const vector_3d_t a, const vector_3d_t b)
 {
@@ -140,12 +141,15 @@ struct vector_3d vector_normalize(const vector_3d_t a)
         v.x = 0.0L;
         v.y = 0.0L;
         v.z = 0.0L;
-        return v;
     }
-    cld inv = 1.0L / n;
-    v.x = a->x * inv;
-    v.y = a->y * inv;
-    v.z = a->z * inv;
+    else
+    {
+        cld inv = 1.0L / n;
+        v.x = a->x * inv;
+        v.y = a->y * inv;
+        v.z = a->z * inv;
+    }
+
     return v;
 }
 
@@ -292,12 +296,15 @@ struct vector_3df vector_f_normalize(const vector_3df_t a)
         v.x = 0.0f;
         v.y = 0.0f;
         v.z = 0.0f;
-        return v;
     }
-    float inv = 1.0f / n;
-    v.x = a->x * inv;
-    v.y = a->y * inv;
-    v.z = a->z * inv;
+    else
+    {
+        float inv = 1.0f / n;
+        v.x = a->x * inv;
+        v.y = a->y * inv;
+        v.z = a->z * inv;
+    }
+
     return v;
 }
 
